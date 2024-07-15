@@ -3,6 +3,7 @@ from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 
 from app.google_sheets.google_sheets import get_cell_value, write_cell_value
+from app.maps.maps import generate_location_link
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -27,6 +28,11 @@ async def get_image(message: Message):
 async def get_cell(message: Message, cell_value='A2'):
     value = get_cell_value(cell_value)
     await message.answer(f'Значение ячейки: {value}')
+
+
+@router.message(Command('Place'))
+async def get_location(message: Message, place='улица Ленина 1, Москва'):
+    await message.answer(generate_location_link(place))
 
 
 @router.message(F.text)
