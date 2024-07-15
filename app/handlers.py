@@ -2,7 +2,7 @@ from aiogram import F, Router
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 
-from app.google_sheets.google_sheets import get_cell_value
+from app.google_sheets.google_sheets import get_cell_value, write_cell_value
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -12,7 +12,8 @@ router = Router()
 
 @router.message(CommandStart())
 async def cmd_start(message: Message):
-    await message.answer(f'Привет, {message.from_user.first_name}')
+    await message.answer(f'Привет, {message.from_user.first_name}\n'
+                         f'Введите дату в формате DD.MM.YYYY')
 
 
 @router.message(Command('Image'))
@@ -26,3 +27,10 @@ async def get_image(message: Message):
 async def get_cell(message: Message, cell_value='A2'):
     value = get_cell_value(cell_value)
     await message.answer(f'Значение ячейки: {value}')
+
+
+@router.message(F.text)
+async def write_cell(message: Message):
+    result = write_cell_value(message.text)
+    await message.answer(result)
+
