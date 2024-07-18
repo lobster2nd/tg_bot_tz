@@ -3,7 +3,6 @@ import os
 from aiogram import F, Router
 from aiogram.filters import CommandStart
 from aiogram.types import Message, LabeledPrice, PreCheckoutQuery
-from aiogram.types.message import ContentType
 
 from app.google_sheets.google_sheets import get_cell_value, write_cell_value
 from app.maps.maps import generate_location_link
@@ -31,8 +30,7 @@ async def cmd_start(message: Message):
 @router.message(F.text == 'Изображение')
 async def get_image(message: Message):
     await message.answer_photo(
-        photo='https://quod.lib.umich.edu/f/fc/images/13761232.0043.102-00000001.jpg',
-        caption='img1.jpg')
+        photo=f'https://loremflickr.com/320/240', caption='img1.jpg')
 
 
 @router.message(F.text == 'Ячейка А2')
@@ -69,11 +67,6 @@ async def buy_process(message: Message):
 @router.pre_checkout_query(lambda q: True)
 async def checkout_process(pre_checkout_query: PreCheckoutQuery):
     await pre_checkout_query.answer(ok=True)
-
-
-@router.message()
-async def successful_payment(message: Message):
-    await message.answer(f'Оплата прошла успешно')
 
 
 @router.message(F.text)
